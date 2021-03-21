@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,9 +25,14 @@ import java.util.List;
 
 public class main {
     public static void main(String[] args) {
-        doTask1();
+
+        List<String> arrayList;
+        arrayList = doTask1();
+        System.out.println(arrayList);
     }
-    public static void doTask1(){
+
+
+    public static List<String> doTask1(){
         List<String> stringList = new ArrayList<>();
         stringList.add("I");
         stringList.add("Love");
@@ -35,6 +41,9 @@ public class main {
         stringList.add("Java");
         stringList.add("Loves");
         stringList.add("Me");
-        stringList.forEach(s -> System.out.println(stringList.));
+        Iterator<String> iterator = stringList.iterator();
+        iterator.forEachRemaining(s -> System.out.println(iterator.next()));
+        return stringList;
     }
+    public static void forItem()
 }
