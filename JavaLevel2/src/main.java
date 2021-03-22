@@ -26,13 +26,13 @@ import java.util.List;
 public class main {
     public static void main(String[] args) {
 
-        List<String> arrayList;
-        arrayList = doTask1();
-        System.out.println(arrayList);
+
+       doTask1();
+
     }
 
 
-    public static List<String> doTask1(){
+    public static void doTask1(){
         List<String> stringList = new ArrayList<>();
         stringList.add("I");
         stringList.add("Love");
@@ -41,9 +41,9 @@ public class main {
         stringList.add("Java");
         stringList.add("Loves");
         stringList.add("Me");
-        Iterator<String> iterator = stringList.iterator();
-        iterator.forEachRemaining(s -> System.out.println(iterator.next()));
-        return stringList;
+
+        stringList.forEachRemaining(s -> System.out.println(s));
+
     }
     public static void forItem()
 }
