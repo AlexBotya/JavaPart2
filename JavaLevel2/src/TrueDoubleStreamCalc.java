@@ -1,16 +1,20 @@
 import static java.lang.System.arraycopy;
 
-public class DoubleStreamCalc {
+public class TrueDoubleStreamCalc {
     static final int size = 10000000;
     static final int h = size / 2;
-    float[] arr = new float[size];
-    float[] a1 = new float[h];
-    float[] a2 = new float[h];
-    long startTime, allStartTime;
+    private float[] arr = new float[size];
+    private float[] a1 = new float[h];
+    private float[] a2 = new float[h];
+    private long startTime, allStartTime;
+    private int endPoint1 = 0;
+    private int endPoint2 = 0;
+    float counter = 0.0f;
+    String waitingMessage = "Waiting for calculation completed...";
 
 
     public void calc() throws InterruptedException {
-        System.out.println("Two thread calc is running...");
+        System.out.println("\n True two thread calc is running...");
         allStartTime = System.currentTimeMillis();
         setStartTime();
         arraycopy(arr, 0, a1, 0, h);
@@ -20,13 +24,20 @@ public class DoubleStreamCalc {
             setStartTime();
             calc(a1);
             printDuration("First Tread proceed time: ");
+            endPoint1=1;
         }).start();
         new Thread( ()-> {
             setStartTime();
             calc(a2);
             printDuration("Second Tread proceed time: ");
+            endPoint2=1;
         }).start();
-        Thread.sleep(800);
+        while(endPoint1==0 || endPoint2 == 0){
+            Thread.sleep(100);
+            counter+=0.1f;
+            System.out.println(waitingMessage + counter + " second");
+
+        }
         setStartTime();
         System.arraycopy(a1, 0, arr, 0, h);
         System.arraycopy(a2, 0, arr, h, h);
