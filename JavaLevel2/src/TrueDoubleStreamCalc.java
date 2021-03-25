@@ -7,8 +7,8 @@ public class TrueDoubleStreamCalc {
     private float[] a1 = new float[h];
     private float[] a2 = new float[h];
     private long startTime, allStartTime;
-    private int endPoint1 = 0;
-    private int endPoint2 = 0;
+    private boolean endPoint1 = true;
+    private boolean endPoint2 = true;
     float counter = 0.0f;
     String waitingMessage = "Waiting for calculation completed...";
 
@@ -24,15 +24,15 @@ public class TrueDoubleStreamCalc {
             setStartTime();
             calc(a1);
             printDuration("First Tread proceed time: ");
-            endPoint1=1;
+            endPoint1=false;
         }).start();
         new Thread( ()-> {
             setStartTime();
             calc(a2);
             printDuration("Second Tread proceed time: ");
-            endPoint2=1;
+            endPoint2=false;
         }).start();
-        while(endPoint1==0 || endPoint2 == 0){
+        while(endPoint1|| endPoint2){
             Thread.sleep(100);
             counter+=0.1f;
             System.out.println(waitingMessage + counter + " second");
