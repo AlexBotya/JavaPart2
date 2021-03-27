@@ -1,3 +1,5 @@
+package Lesson5_Throws;
+
 public class main {
     public static void main(String[] args) {
         SingleStreamCalc singleStreamCalc = new SingleStreamCalc();

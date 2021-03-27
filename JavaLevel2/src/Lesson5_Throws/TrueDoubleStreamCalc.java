@@ -1,6 +1,8 @@
+package Lesson5_Throws;
+
 import static java.lang.System.arraycopy;
 
-public class SyncDoubleStreamCalc {
+public class TrueDoubleStreamCalc {
     static final int size = 10000000;
     static final int h = size / 2;
     private float[] arr = new float[size];
@@ -14,30 +16,30 @@ public class SyncDoubleStreamCalc {
 
 
     public void calc() throws InterruptedException {
-        System.out.println("\n Synchronized Two thread calc is running...");
+        System.out.println("\n True two thread calc is running...");
         allStartTime = System.currentTimeMillis();
         setStartTime();
         arraycopy(arr, 0, a1, 0, h);
         arraycopy(arr, h, a2, 0, h);
         printDuration("Array breakDown time: ");
-        new Thread ( ()->{
+        Thread t1 = new Thread( ()->{
             setStartTime();
             calc(a1);
             printDuration("First Tread proceed time: ");
             endPoint1=false;
-        }).start();
-        new Thread( ()-> {
+        });
+        Thread t2 = new Thread( ()-> {
             setStartTime();
             calc(a2);
             printDuration("Second Tread proceed time: ");
             endPoint2=false;
-        }).start();
-        while(endPoint1 || endPoint2){
-            Thread.sleep(100);
-            counter+=0.1f;
-            System.out.println(waitingMessage + counter + " second");
+        });
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
 
-        }
+
         setStartTime();
         System.arraycopy(a1, 0, arr, 0, h);
         System.arraycopy(a2, 0, arr, h, h);
@@ -45,7 +47,7 @@ public class SyncDoubleStreamCalc {
 
 
     }
-    private synchronized void calc(float[] array){
+    private void calc(float[] array){
         startTime = System.currentTimeMillis();
         for (int i = 0; i < array.length; i++) {
             array[i]= (float)(array[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));

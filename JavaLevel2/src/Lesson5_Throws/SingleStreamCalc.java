@@ -1,3 +1,5 @@
+package Lesson5_Throws;
+
 public class SingleStreamCalc {
     static final int size = 10000000;
     float[] arr = new float[size];
