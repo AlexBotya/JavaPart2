@@ -10,7 +10,7 @@ public class Client {
     public Client() {
         try {
 
-            Socket socket = new Socket("127.0.0.1", 8080);
+            Socket socket = new Socket("192.168.0.19", 8080);
             DataInputStream in = new DataInputStream(socket.getInputStream());
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             new Thread(() -> {
