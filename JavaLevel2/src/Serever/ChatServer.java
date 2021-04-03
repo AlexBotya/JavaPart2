@@ -41,12 +41,22 @@ public class ChatServer {
         }
     }
 
+    public void uniCast(String name, String message){
+        Iterator<ClientHandler> iterator = loggedClients.iterator();
+        while (iterator.hasNext()){
+            ClientHandler client = iterator.next();
+            if (client.getName().equals(name)){
+                client.sendMessage(message);
+            }
+        }
+    }
+
 
     public void  subscribe(ClientHandler clientHandler){
         loggedClients.add(clientHandler);
     }
 
-    public void unsuscribe(ClientHandler clientHandler){
+    public void unsubscribe(ClientHandler clientHandler){
         loggedClients.remove(clientHandler);
     }
 

@@ -55,10 +55,10 @@ public class ClientHandler {
                      String login = credentialsStructure[1];
                      String password = credentialsStructure[2];
 
-                     Optional<AuthenticationService.Entry> mayBeCredentionals
+                     Optional<AuthenticationService.Entry> mayBeCredentials
                              = chatServer.getAuthenticationService().findEntryCredentials(login, password);
-                     if(mayBeCredentionals.isPresent()){
-                         AuthenticationService.Entry credentials = mayBeCredentionals.get();
+                     if(mayBeCredentials.isPresent()){
+                         AuthenticationService.Entry credentials = mayBeCredentials.get();
                          if (!chatServer.isLoggedIn(credentials.getName())){
                              name = credentials.getName();
                              chatServer.broadcast(String.format("User [%s] entered the chat.", name ));
@@ -88,7 +88,12 @@ public class ClientHandler {
 
             try {
                 String message = in.readUTF();
-                chatServer.broadcast(name+": " + message);
+                if (message.startsWith("/w")){
+                    String[] uniCastMessageSplit = message.split("\\s"); // s - space
+                    String name = uniCastMessageSplit[1];
+                    String uniCastMessage = uniCastMessageSplit[2];
+                    chatServer.uniCast(name, uniCastMessage);
+                }else chatServer.broadcast(name+": " + message);
             } catch (IOException e) {
                 throw new ChatServerException("Something went wrong during receiving the message", e);
             }
