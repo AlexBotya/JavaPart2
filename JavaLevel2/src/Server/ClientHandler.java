@@ -1,10 +1,9 @@
-package Serever;
+package Server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.util.Optional;
 
 public class ClientHandler {
@@ -92,9 +91,9 @@ public class ClientHandler {
                     String[] uniCastMessageSplit = message.split("\\s"); // s - space
                     String name = uniCastMessageSplit[1];
                     String uniCastMessage = uniCastMessageSplit[2];
-                    chatServer.uniCast(name, uniCastMessage);
+                    chatServer.uniCast(name ,"/private message/: " + uniCastMessage);
 
-                }else chatServer.broadcast(name+": " + message);
+                } chatServer.broadcast(name+": " + message);
             } catch (IOException e) {
                 throw new ChatServerException("Something went wrong during receiving the message", e);
             }

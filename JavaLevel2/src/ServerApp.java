@@ -1,4 +1,4 @@
-import Serever.ChatServer;
+import Server.ChatServer;
 
 public class ServerApp {
     public static void main(String[] args) {

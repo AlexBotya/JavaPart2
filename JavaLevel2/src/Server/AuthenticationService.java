@@ -1,9 +1,7 @@
-package Serever;
+package Server;
 
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class AuthenticationService {
     private static final Set<Entry> entries = Set.of(

@@ -1,4 +1,4 @@
-package Serever;
+package Server;
 
 public class ChatServerException extends RuntimeException{
     public ChatServerException() {
