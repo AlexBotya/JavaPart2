@@ -47,6 +47,7 @@ public class ChatServer {
             ClientHandler client = iterator.next();
             if (client.getName().equals(name)){
                 client.sendMessage(message);
+
             }
         }
     }

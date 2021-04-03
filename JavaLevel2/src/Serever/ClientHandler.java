@@ -93,6 +93,7 @@ public class ClientHandler {
                     String name = uniCastMessageSplit[1];
                     String uniCastMessage = uniCastMessageSplit[2];
                     chatServer.uniCast(name, uniCastMessage);
+
                 }else chatServer.broadcast(name+": " + message);
             } catch (IOException e) {
                 throw new ChatServerException("Something went wrong during receiving the message", e);
