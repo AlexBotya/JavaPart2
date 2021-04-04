@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Optional;
+import java.util.Timer;
 
 public class ClientHandler {
     private Socket socket;
@@ -42,6 +43,7 @@ public class ClientHandler {
 
     private void doAuthentication(){
         sendMessage("Welcome! Please, do authentication.");
+
          while (true){
              try {
                  String message = in.readUTF();
@@ -88,12 +90,11 @@ public class ClientHandler {
             try {
                 String message = in.readUTF();
                 if (message.startsWith("/w")){
-                    String[] uniCastMessageSplit = message.split("\\s"); // s - space
-                    String name = uniCastMessageSplit[1];
-                    String uniCastMessage = uniCastMessageSplit[2];
-                    chatServer.uniCast(name ,"/private message/: " + uniCastMessage);
+                    String[] uniCastMessageSplit = message.split("\\s");
+                    String destinationName = uniCastMessageSplit[1];
+                    chatServer.uniCast(destinationName ,"/private message from " + name + "/: " + message);
 
-                } chatServer.broadcast(name+": " + message);
+                }else chatServer.broadcast(name+": " + message);
             } catch (IOException e) {
                 throw new ChatServerException("Something went wrong during receiving the message", e);
             }

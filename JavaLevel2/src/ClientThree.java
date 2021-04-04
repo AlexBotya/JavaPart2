@@ -1,7 +1,7 @@
-import Client.ChatClient;
+import Client.ChatStarter;
 
 public class ClientThree {
     public static void main(String[] args) {
-        new ChatClient();
+        ChatStarter.run();
     }
 }
