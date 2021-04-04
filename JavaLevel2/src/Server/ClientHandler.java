@@ -89,9 +89,8 @@ public class ClientHandler {
                 String message = in.readUTF();
                 if (message.startsWith("/w")){
                     String[] uniCastMessageSplit = message.split("\\s"); // s - space
-                    String name = uniCastMessageSplit[1];
-                    String uniCastMessage = uniCastMessageSplit[2];
-                    chatServer.uniCast(name ,"/private message/: " + uniCastMessage);
+                    String destinationName = uniCastMessageSplit[1];
+                    chatServer.uniCast(destinationName ,"/private message from " + name + "/: " + message);
 
                 } chatServer.broadcast(name+": " + message);
             } catch (IOException e) {
