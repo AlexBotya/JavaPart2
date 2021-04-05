@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Optional;
 import java.util.Timer;
 
@@ -11,6 +12,7 @@ public class ClientHandler {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private int timeOut = 10000;
 
     private String name;
     private ChatServer chatServer;
@@ -25,7 +27,11 @@ public class ClientHandler {
             throw new ChatServerException("Something went wrong during connection establishment", e);
         }
         new Thread(()->{
-            doAuthentication();
+            try {
+                doAuthentication();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             listen();
         })
                 .start();
@@ -41,11 +47,12 @@ public class ClientHandler {
 
     }
 
-    private void doAuthentication(){
+    private void doAuthentication() throws IOException {
         sendMessage("Welcome! Please, do authentication.");
+        while (true){
 
-         while (true){
              try {
+                 socket.setSoTimeout(timeOut);
                  String message = in.readUTF();
                  /**
                   * login pattern
@@ -63,6 +70,7 @@ public class ClientHandler {
                          if (!chatServer.isLoggedIn(credentials.getName())){
                              name = credentials.getName();
                              chatServer.broadcast(String.format("User [%s] entered the chat.", name ));
+                             socket.setSoTimeout(0);
                              chatServer.subscribe(this);
                              return;
                          }
@@ -78,6 +86,7 @@ public class ClientHandler {
                      sendMessage("Incorrect authentication message. Please use valid command\n" +
                              "-auth your_login your_password");
                  }
+
              } catch (IOException e) {
                  throw new ChatServerException("Something went wrong during authentication", e);
              }
