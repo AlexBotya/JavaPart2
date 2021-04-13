@@ -11,9 +11,9 @@ public class DBConnection {
     public static Connection getConnection() {
         try {
             return DriverManager.getConnection(
-                    "jdbc:mysql://192.168.0.19:3306/chatusers",
+                    "jdbc:mysql://localhost:3306/chatusers",
                     "root",
-                    "1"
+                    null
             );
         } catch (SQLException throwables) {
             throw new RuntimeException(throwables);

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EntryDDProcessing {
     public List<Entry> findAll() {
@@ -34,6 +35,35 @@ public class EntryDDProcessing {
         }
     }
 
+    public Optional<Entry> findByLogin(String login) {
+        Connection connection = DBConnection.getConnection();
+
+
+        try {
+
+            try {
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM CHATUSERS WHERE LOGIN = " + login);
+                if (resultSet.next()) {
+                    return Optional.of(
+                            new Entry(
+                                    resultSet.getString("name"),
+                                    resultSet.getString("login"),
+                                    resultSet.getString("password")
+                            )
+                    );
+                }
+
+                return Optional.empty();
+
+            } catch (SQLException throwables) {
+                throw new RuntimeException(throwables);
+            }
+        } finally {
+            close(connection);
+        }
+
+    }
 
     private void close(Connection connection) {
         try {
