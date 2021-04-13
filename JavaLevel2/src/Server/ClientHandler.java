@@ -4,15 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Optional;
-import java.util.Timer;
 
 public class ClientHandler {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
-    private int timeOut = 10000;
+    private int timeOut = 120000;
 
     private String name;
     private ChatServer chatServer;
@@ -63,10 +61,10 @@ public class ClientHandler {
                      String login = credentialsStructure[1];
                      String password = credentialsStructure[2];
 
-                     Optional<AuthenticationService.Entry> mayBeCredentials
+                     Optional<Entry> mayBeCredentials
                              = chatServer.getAuthenticationService().findEntryCredentials(login, password);
                      if(mayBeCredentials.isPresent()){
-                         AuthenticationService.Entry credentials = mayBeCredentials.get();
+                         Entry credentials = mayBeCredentials.get();
                          if (!chatServer.isLoggedIn(credentials.getName())){
                              name = credentials.getName();
                              chatServer.broadcast(String.format("User [%s] entered the chat.", name ));
