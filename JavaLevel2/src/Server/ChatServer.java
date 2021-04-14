@@ -34,42 +34,36 @@ public class ChatServer {
         return authenticationService;
     }
 
-    public void broadcast(String message){
-        for  (ClientHandler clientHandler: loggedClients) {
+    public void broadcast(String message) {
+        for (ClientHandler clientHandler : loggedClients) {
             clientHandler.sendMessage(message);
 
         }
     }
 
-    public void uniCast(String name, String message){
+    public void uniCast(String name, String message) {
         Iterator<ClientHandler> iterator = loggedClients.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             ClientHandler client = iterator.next();
-            if (client.getName().equals(name)){
+            if (client.getName().equals(name)) {
                 client.sendMessage(message);
+                break;
 
             }
         }
     }
 
 
-    public void  subscribe(ClientHandler clientHandler){
+    public void subscribe(ClientHandler clientHandler) {
         loggedClients.add(clientHandler);
     }
 
-    public void unsubscribe(ClientHandler clientHandler){
+    public void unsubscribe(ClientHandler clientHandler) {
         loggedClients.remove(clientHandler);
     }
 
     public boolean isLoggedIn(String name) {
-//        Iterator<ClientHandler> iterator = loggedClients.iterator();
-//        while (iterator.hasNext()){
-//            ClientHandler client = iterator.next();
-//            if (client.getName().equals(name)){
-//                return true;
-//            }
-//        }return  false;
-//
+
         return loggedClients.stream()
                 .filter(client -> client.getName().equals(name))
                 .findFirst()

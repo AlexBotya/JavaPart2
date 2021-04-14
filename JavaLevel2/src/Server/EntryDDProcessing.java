@@ -35,7 +35,7 @@ public class EntryDDProcessing {
         }
     }
 
-    public Optional<Entry> findByLogin(String login) {
+    public Optional<Entry> findByLoginAndPassword(String login, String password) {
         Connection connection = DBConnection.getConnection();
 
 
@@ -43,7 +43,8 @@ public class EntryDDProcessing {
 
             try {
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM CHATUSERS WHERE LOGIN = " + login);
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM CHATUSERS WHERE LOGIN = '" + login +
+                        "' AND PASSWORD = '" + password + "'");
                 if (resultSet.next()) {
                     return Optional.of(
                             new Entry(
