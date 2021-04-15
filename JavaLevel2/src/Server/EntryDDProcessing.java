@@ -13,8 +13,7 @@ public class EntryDDProcessing {
         try {
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "SELECT * FROM users WHERE login = ? AND password = ?"
-                );
+                        "SELECT * FROM users WHERE login = ? AND password = ?");
                 preparedStatement.setString(1, login);
                 preparedStatement.setString(2, password);
                 ResultSet resultSet = preparedStatement.executeQuery();
