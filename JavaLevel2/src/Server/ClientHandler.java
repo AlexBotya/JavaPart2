@@ -1,8 +1,6 @@
 package Server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.Optional;
 
@@ -74,6 +72,7 @@ public class ClientHandler {
                          }
                          else{
                              sendMessage(String.format("User with name: %s is already logged in", credentials.getName()));
+                             loadChatHistory();
                          }
 
 
@@ -114,6 +113,27 @@ public class ClientHandler {
             out.writeUTF(message);
         } catch (IOException e) {
             throw new ChatServerException("Something went wrong during sending the message", e);
+        }
+
+    }
+
+
+    public void loadChatHistory(){
+
+        File file = new File("JavaLevel2/src/Server/history.txt");
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            int b;
+            int stringCounter = 0;
+            while (((b = fis.read()) != -1)&& stringCounter<100 ) {
+                chatServer.uniCast(name,Character.toString((char) b));
+                if ((char)b == '\n' ) stringCounter++;
+
+
+            }
+            System.out.println();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

@@ -1,14 +1,7 @@
 package Client;
 
 import Client.GUI.API.Receiver;
-import Client.GUI.API.Sender;
 import Client.GUI.ChatFrame;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.Scanner;
 
 public class Chat {
     private final ChatFrame frame;

@@ -1,8 +1,11 @@
 package Server;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -37,6 +40,7 @@ public class ChatServer {
     public void broadcast(String message) {
         for (ClientHandler clientHandler : loggedClients) {
             clientHandler.sendMessage(message);
+            writeHistoryFile(message);
 
         }
     }
@@ -69,5 +73,17 @@ public class ChatServer {
                 .findFirst()
                 .isPresent();
     }
+    public void writeHistoryFile (String message){
+        File file = new File("JavaLevel2/src/Server/history.txt");
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(message.getBytes(StandardCharsets.UTF_8));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
 
