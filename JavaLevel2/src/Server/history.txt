@@ -1,0 +1,50 @@
+User with name: User2entered the chat.
+USer1: dasd
+User2: sdvsxvsdv
+User with name: USer1 - entered the chat.
+User with name: User2 - entered the chat.
+USer1: zxcz
+USer1: xzc
+USer1: xzc
+USer1: zxc
+USer1: zxc
+USer1: zxc
+USer1: zxc
+USer1: zxc
+USer1: xzc
+USer1: zxc
+USer1: zxc
+USer1: xzc
+USer1: zxc
+USer1: qwe
+USer1: qweqwe
+USer1: qw
+User with name: USer1 - entered the chat.
+USer1: asda
+USer1: sad
+USer1: sada
+USer1: asd
+USer1: sad
+USer1: asdw
+USer1: qwe
+USer1: qwe
+USer1: qwe
+USer1: qwe
+USer1: qwe
+USer1: qwe
+USer1: qwe
+USer1: qwe
+USer1: qwe
+User with name: USer1 - entered the chat.
+USer1: -auth l2 p2
+User with name: User3 - entered the chat.
+USer1: werwe
+USer1: 
+User3: asdsadasd
+User with name: USer1 - entered the chat.
+USer1: sdgfsdf
+User with name: USer1 - entered the chat.
+User with name: USer1 - entered the chat.
+User with name: USer1 - entered the chat.
+User with name: USer1 - entered the chat.
+User with name: USer1 - entered the chat.

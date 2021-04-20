@@ -9,6 +9,7 @@ import java.awt.*;
 
 public class ChatFrame extends JFrame {
     private final JTextArea chatArea;
+    private final Scrollbar scrollBar;
 
     public ChatFrame(Sender sender) {
         setTitle("Chat v1.0");
@@ -20,9 +21,10 @@ public class ChatFrame extends JFrame {
         top.setLayout(new BorderLayout());
         chatArea = new JTextArea();
         chatArea.setEditable(false);
-
+        scrollBar = new Scrollbar();
 
         top.add(chatArea, BorderLayout.CENTER);
+        top.add(scrollBar, BorderLayout.EAST);
 
 
         JPanel bottom = new JPanel();

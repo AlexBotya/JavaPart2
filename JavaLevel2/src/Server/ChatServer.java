@@ -18,7 +18,6 @@ public class ChatServer {
         authenticationService = new AuthenticationService();
         loggedClients = new HashSet<>();
 
-
         try {
             ServerSocket serverSocket = new ServerSocket(8080);
             System.out.println("Server is running up...");
@@ -40,8 +39,6 @@ public class ChatServer {
     public void broadcast(String message) {
         for (ClientHandler clientHandler : loggedClients) {
             clientHandler.sendMessage(message);
-            writeHistoryFile(message);
-
         }
     }
 
@@ -73,11 +70,13 @@ public class ChatServer {
                 .findFirst()
                 .isPresent();
     }
-    public void writeHistoryFile (String message){
+
+    public void writeToHistoryFile(String message) {
         File file = new File("JavaLevel2/src/Server/history.txt");
 
-        try (FileOutputStream fos = new FileOutputStream(file)) {
+        try (FileOutputStream fos = new FileOutputStream(file, true)) {
             fos.write(message.getBytes(StandardCharsets.UTF_8));
+            fos.write("\n".getBytes(StandardCharsets.UTF_8));
 
         } catch (IOException e) {
             e.printStackTrace();

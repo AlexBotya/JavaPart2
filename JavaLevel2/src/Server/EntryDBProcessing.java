@@ -6,14 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class EntryDDProcessing {
+public class EntryDBProcessing {
 
     public Optional<Entry> findByLoginAndPassword(String login, String password) {
         Connection connection = DBConnection.getConnection();
         try {
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "SELECT * FROM users WHERE login = ? AND password = ?");
+                        "SELECT * FROM chatusers WHERE login = ? AND password = ?");
                 preparedStatement.setString(1, login);
                 preparedStatement.setString(2, password);
                 ResultSet resultSet = preparedStatement.executeQuery();

@@ -2,6 +2,8 @@ package Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ClientHandler {
@@ -22,7 +24,7 @@ public class ClientHandler {
         } catch (IOException e) {
             throw new ChatServerException("Something went wrong during connection establishment", e);
         }
-        new Thread(()->{
+        new Thread(() -> {
             try {
                 doAuthentication();
             } catch (IOException e) {
@@ -31,107 +33,110 @@ public class ClientHandler {
             listen();
         })
                 .start();
-
     }
 
     public String getName() {
         return name;
     }
 
-    private void listen(){
+    private void listen() {
         receiveMessage();
 
     }
 
     private void doAuthentication() throws IOException {
         sendMessage("Welcome! Please, do authentication.");
-        while (true){
+        while (true) {
+            try {
+                socket.setSoTimeout(timeOut);
+                String message = in.readUTF();
+                /**
+                 * login pattern
+                 * -auth l1 p1
+                 */
+                if (message.startsWith("-auth")) {
+                    String[] credentialsStructure = message.split("\\s"); // s - space
+                    String login = credentialsStructure[1];
+                    String password = credentialsStructure[2];
+                    Optional<Entry> mayBeCredentials
+                            = chatServer.getAuthenticationService().findEntryCredentials(login, password);
+                    if (mayBeCredentials.isPresent()) {
+                        Entry credentials = mayBeCredentials.get();
+                        if (!chatServer.isLoggedIn(credentials.getName())) {
+                            name = credentials.getName();
+                            chatServer.broadcast(String.format("User [%s] entered the chat.", name));
+                            chatServer.writeToHistoryFile("User with name: " + name + " - entered the chat.");
+                            loadChatHistory();
+                            socket.setSoTimeout(0);
+                            chatServer.subscribe(this);
+                            return;
+                        } else {
+                            sendMessage(String.format("User with name: %s is already logged in", credentials.getName()));
 
-             try {
-                 socket.setSoTimeout(timeOut);
-                 String message = in.readUTF();
-                 /**
-                  * login pattern
-                  * -auth l1 p1
-                  */
-                 if (message.startsWith("-auth")){
-                     String[] credentialsStructure = message.split("\\s"); // s - space
-                     String login = credentialsStructure[1];
-                     String password = credentialsStructure[2];
+                            loadChatHistory();
+                        }
 
-                     Optional<Entry> mayBeCredentials
-                             = chatServer.getAuthenticationService().findEntryCredentials(login, password);
-                     if(mayBeCredentials.isPresent()){
-                         Entry credentials = mayBeCredentials.get();
-                         if (!chatServer.isLoggedIn(credentials.getName())){
-                             name = credentials.getName();
-                             chatServer.broadcast(String.format("User [%s] entered the chat.", name ));
-                             socket.setSoTimeout(0);
-                             chatServer.subscribe(this);
-                             return;
-                         }
-                         else{
-                             sendMessage(String.format("User with name: %s is already logged in", credentials.getName()));
-                             loadChatHistory();
-                         }
-
-
-                     }else {
-                         sendMessage("Incorrect login or password.");
-                     }
-                 }else {
-                     sendMessage("Incorrect authentication message. Please use valid command\n" +
-                             "-auth your_login your_password");
-                 }
-
-             } catch (IOException e) {
-                 throw new ChatServerException("Something went wrong during authentication", e);
-             }
-
-         }
+                    } else {
+                        sendMessage("Incorrect login or password.");
+                    }
+                } else {
+                    sendMessage("Incorrect authentication message. Please use valid command\n" +
+                            "-auth your_login your_password");
+                }
+            } catch (IOException e) {
+                throw new ChatServerException("Something went wrong during authentication", e);
+            }
+        }
     }
-    public void receiveMessage(){
-        while (true){
+
+    public void receiveMessage() {
+        while (true) {
 
             try {
                 String message = in.readUTF();
-                if (message.startsWith("/w")){
+                if (message.startsWith("/w")) {
                     String[] uniCastMessageSplit = message.split("\\s");
                     String destinationName = uniCastMessageSplit[1];
-                    chatServer.uniCast(destinationName ,"/private message from " + name + "/: " + message);
+                    chatServer.uniCast(destinationName, "/private message from " + name + "/: " + message);
 
-                }else chatServer.broadcast(name+": " + message);
+                } else {
+                    chatServer.broadcast(name + ": " + message);
+                    chatServer.writeToHistoryFile(name + ": " + message);
+                }
             } catch (IOException e) {
                 throw new ChatServerException("Something went wrong during receiving the message", e);
             }
         }
-
     }
 
-    public void sendMessage(String message){
+    public void sendMessage(String message) {
         try {
             out.writeUTF(message);
         } catch (IOException e) {
             throw new ChatServerException("Something went wrong during sending the message", e);
         }
-
     }
 
-
-    public void loadChatHistory(){
+    public void loadChatHistory() {
 
         File file = new File("JavaLevel2/src/Server/history.txt");
 
-        try (FileInputStream fis = new FileInputStream(file)) {
-            int b;
-            int stringCounter = 0;
-            while (((b = fis.read()) != -1)&& stringCounter<100 ) {
-                chatServer.uniCast(name,Character.toString((char) b));
-                if ((char)b == '\n' ) stringCounter++;
-
-
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            List<String> historyList = new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                historyList.add(line);
             }
             System.out.println();
+            if (historyList.size() > 100) {
+                for (int i = historyList.size() - 100; i < historyList.size(); i++) {
+                    sendMessage(historyList.get(i));
+                }
+            } else {
+                for (int i = 0; i < historyList.size(); i++) {
+                    sendMessage(historyList.get(i));
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
